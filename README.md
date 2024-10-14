@@ -51,49 +51,22 @@ Contact
 
 The Astronomer CLI is maintained with love by the Astronomer team. To report a bug or suggest a change, reach out to our support.
 
-# Erro ao acessar Bando de Dados PostGreSQL pelo AIRFLOW
-A mensagem de erro que você está recebendo indica que o Airflow não consegue resolver o nome do host "host.docker.internal" para um endereço. Isso pode acontecer por algumas razões, especialmente no contexto do Docker. Vamos explorar algumas soluções possíveis:
+# Error accessing PostGreSQL database via AIRFLOW
 
-1. Verifique a Conexão no Docker
-Se você estiver executando o Airflow em um container Docker e o PostgreSQL em sua máquina host, o nome host.docker.internal deve funcionar para conectar-se ao host. Contudo, isso só funciona se:
+The error message you are receiving indicates that Airflow cannot resolve the hostname "host.docker.internal" to an address. This can happen for a few reasons, especially in the context of Docker. Let's explore some possible solutions:
 
-Você estiver usando o Docker no Windows ou macOS. Para usuários do Linux, host.docker.internal pode não estar disponível. Para usuários do Linux, uma solução é usar o endereço IP da máquina host ou o nome do host.
-Como verificar o IP do Host no Linux:
-Encontre o IP da sua máquina host:
+Check the Connection in Docker If you are running Airflow in a Docker container and PostgreSQL on your host machine, the name host.docker.internal should work to connect to the host. However, this only works if:
+You are using Docker on Windows or macOS. For Linux users, host.docker.internal may not be available. For Linux users, a workaround is to use the host machine's IP address or hostname. How to check the Host IP on Linux: Find your host machine's IP:
 
-bash
-Copiar código
-ip addr show docker0
-Procure por uma linha que começa com inet, que deve se parecer com inet 172.17.0.1.
+bash Copy code ip addr show docker0 Look for a line that starts with inet, which should look like inet 172.17.0.1.
 
-Use esse endereço IP como o host na sua configuração de conexão no Airflow.
+Use this IP address as the host in your Airflow connection configuration.
 
-2. Configuração da Conexão no Airflow
-Certifique-se de que a configuração da conexão no Airflow esteja correta. Abaixo está um exemplo da configuração que deve ser usada:
+Airflow Connection Configuration Make sure that your Airflow connection configuration is correct. Below is an example of the configuration that you should use:
+Connection Id: postgres_astro Connection Type: Postgres Host: host.docker.internal (or the IP you got if you are on Linux) Database: astro Login: postgres Password: (your PostgreSQL password) Port: 5432 Extra: (can be left empty) 3. Verify the Connection in Airflow After making the changes, test the connection in Airflow:
 
-Connection Id: postgres_astro
-Connection Type: Postgres
-Host: host.docker.internal (ou o IP que você obteve, se estiver no Linux)
-Database: astro
-Login: postgres
-Password: (sua senha do PostgreSQL)
-Port: 5432
-Extra: (pode ser deixado vazio)
-3. Verificar a Conexão no Airflow
-Depois de fazer as alterações, teste a conexão no Airflow:
+Go to the Connections section in Airflow. Select the postgres_astro connection. Click Test to verify that the connection is successful. 4. Verify the Airflow and PostgreSQL Provider Version Make sure that you are using the correct version of Airflow and the PostgreSQL provider. If you are still using PostgresOperator, consider upgrading to SQLExecuteQueryOperator, as indicated in the deprecation warning message.
 
-Vá para a seção Connections no Airflow.
-Selecione a conexão postgres_astro.
-Clique em Test para verificar se a conexão é bem-sucedida.
-4. Verificar a Versão do Airflow e do Provider do PostgreSQL
-Certifique-se de que você está utilizando a versão correta do Airflow e do provedor PostgreSQL. Se você ainda estiver usando o PostgresOperator, considere atualizar para o SQLExecuteQueryOperator, conforme indicado na mensagem de aviso sobre a depreciação.
+Direct Connection If you are still experiencing issues, as a temporary workaround, you can try running Airflow outside of Docker, directly on your machine, to see if the connection works normally. This way, you can confirm whether the issue is related to Docker or your Airflow configuration.
 
-5. Conexão Direta
-Se você ainda tiver problemas, como solução temporária, você pode tentar rodar o Airflow fora do Docker, diretamente na sua máquina, para verificar se a conexão funciona normalmente. Assim, você pode confirmar se o problema está relacionado ao Docker ou à configuração do Airflow.
-
-Resumo das Possíveis Ações
-Tente usar o IP da máquina host em vez de host.docker.internal se você estiver no Linux.
-Verifique se as credenciais e o nome do banco de dados estão corretos.
-Teste a conexão na interface do Airflow.
-Considere atualizar para o SQLExecuteQueryOperator e as dependências necessárias.
-Se você continuar a ter problemas, por favor, forneça qualquer outra mensagem de erro que possa aparecer!
+Summary of Possible Actions Try using the host machine's IP instead of host.docker.internal if you are on Linux. Check that the credentials and database name are correct. Test the connection in the Airflow interface. Consider upgrading to SQLExecuteQueryOperator and the required dependencies. If you continue to experience issues, please provide any other error messages that may appear!
