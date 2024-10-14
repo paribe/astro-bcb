@@ -4,6 +4,7 @@ Overview
 
 # Using Airflow call API and write PostgreSQL project create by ASTRO
 
+![image](https://github.com/user-attachments/assets/9c417bc5-afaf-470e-9635-d929730dfbc4)
 
 Welcome to Astronomer! This project was generated after you ran 'astro dev init' using the Astronomer CLI. This readme describes the contents of the project, as well as how to run Apache Airflow on your local machine.
 
